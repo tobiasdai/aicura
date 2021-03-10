@@ -17,6 +17,11 @@
 
 package nexus
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 var allRepositoriesMockData = `[ {
 	"name" : "nuget-group",
 	"format" : "nuget",
@@ -192,4 +197,17 @@ var apacheMavenRepoMockData = MavenProxyRepository{
 		LayoutPolicy:  LayoutPolicyStrict,
 		VersionPolicy: VersionPolicyRelease,
 	},
+}
+
+func TestMavenAllRepositoryService_List(t *testing.T) {
+	s := newServerWrapper(t).WithResponse(allRepositoriesMockData).Build()
+	defer s.teardown()
+	repos, err := s.Client().MavenRepositoryService.ListAll()
+	assert.NoError(t, err)
+	assert.NotEmpty(t, repos)
+	for _, repo := range repos {
+		if repo.Name == "maven-public" {
+			assert.Equal(t, RepositoryTypeGroup, *repo.Type)
+		}
+	}
 }

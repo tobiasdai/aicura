@@ -17,7 +17,9 @@
 
 package nexus
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 const repositoriesMavenProxyPath = "/repositories/maven/proxy"
 
@@ -119,4 +121,50 @@ func (m *mavenRepositoryService) list(repoType RepositoryType, unmarshalValue in
 		return err
 	}
 	return nil
+}
+
+func (m *mavenRepositoryService) listAll() ([]Repository, error) {
+	repositories := make([]Repository, 0)
+
+	req, err := m.client.get(m.client.appendVersion(repositoriesPath), "")
+	if err != nil {
+		return nil, err
+	}
+	var jsonRepos json.RawMessage
+	_, err = m.client.do(req, &jsonRepos)
+	if err != nil {
+		return nil, err
+	}
+
+	if jsonRepos != nil {
+		err = json.Unmarshal(jsonRepos, &repositories)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return repositories, nil
+}
+
+type MavenRepositoryService service
+
+func (m *MavenRepositoryService) ListAll() ([]Repository, error) {
+	repositories := make([]Repository, 0)
+
+	req, err := m.client.get(m.client.appendVersion(repositoriesPath), "")
+	if err != nil {
+		return nil, err
+	}
+	var jsonRepos json.RawMessage
+	_, err = m.client.do(req, &jsonRepos)
+	if err != nil {
+		return nil, err
+	}
+
+	if jsonRepos != nil {
+		err = json.Unmarshal(jsonRepos, &repositories)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return repositories, nil
 }

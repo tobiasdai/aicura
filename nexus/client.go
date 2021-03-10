@@ -32,7 +32,7 @@ import (
 const (
 	userAgent              = "aicura-nexus-client"
 	applicationJSONContent = "application/json"
-	defaultNewAPIVersion   = "beta"
+	defaultNewAPIVersion   = "v1"
 	apiPath                = "service/rest"
 )
 
@@ -54,7 +54,10 @@ type Client struct {
 	UserService                 UserService
 	MavenProxyRepositoryService MavenProxyRepositoryService
 	MavenGroupRepositoryService MavenGroupRepositoryService
+	MavenRepositoryService      MavenRepositoryService
 	mavenRepositoryService      *mavenRepositoryService
+
+	MavenComponentService       MavenComponentService
 }
 
 // ClientBuilder fluent API to build a new Nexus Client
@@ -115,7 +118,11 @@ func NewClient(baseURL string) *ClientBuilder {
 	c.UserService = (*userService)(&c.shared)
 	c.MavenProxyRepositoryService = (*mavenProxyRepositoryService)(&c.shared)
 	c.MavenGroupRepositoryService = (*mavenGroupRepositoryService)(&c.shared)
+	c.MavenRepositoryService = MavenRepositoryService(c.shared)
 	c.mavenRepositoryService = (*mavenRepositoryService)(&c.shared)
+
+	// components
+	c.MavenComponentService = MavenComponentService(c.shared)
 
 	return &ClientBuilder{c}
 }
