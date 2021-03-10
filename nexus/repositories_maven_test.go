@@ -174,7 +174,7 @@ var apacheMavenRepoMockData = MavenProxyRepository{
 		Name:   "apache",
 		Format: NewRepositoryFormat(RepositoryFormatMaven2),
 		Type:   NewRepositoryType(RepositoryTypeProxy),
-		Online: NewBool(true),
+		//Online: NewBool(true),
 	},
 	Proxy: Proxy{
 		RemoteURL:      "https://repo.maven.apache.org/maven2/",

@@ -36,7 +36,6 @@ type Repository struct {
 	Format *RepositoryFormat `json:"format,omitempty"`
 	Type   *RepositoryType   `json:"type,omitempty"`
 	URL    *string           `json:"url,omitempty"`
-	Online *bool             `json:"online,omitempty"`
 }
 
 // Storage ...
